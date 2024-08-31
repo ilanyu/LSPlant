@@ -156,9 +156,9 @@ inline static bool HookSymNoHandle(const HookHandler &handler, void *original, T
 }
 
 template <HookerType T>
-inline static bool HookSym(const HookHandler &handler, T &arg) {
-    auto original = handler.art_symbol_resolver(arg.sym);
-    return HookSymNoHandle(handler, original, arg);
+inline static bool HookSym(const HookHandler &handler, T &arg, bool resolve_symbol = false) {
+    auto original = resolve_symbol ? handler.art_symbol_resolver(arg.sym) : &arg.sym;
+    return HookSymNoHandle(handler, const_cast<void *>(original), arg);
 }
 
 template <HookerType T, HookerType... Args>
